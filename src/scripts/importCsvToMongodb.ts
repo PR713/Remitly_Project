@@ -1,5 +1,5 @@
-import fs from 'fs';
-import csv from 'csv-parser';
+import * as fs from 'fs';
+import csv = require('csv-parser');
 import mongoose from "mongoose";
 import { BankModel } from '../models/BankModel';
 import 'dotenv/config';
@@ -11,23 +11,24 @@ mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
 
-fs.createReadStream('src/data/SWIFTcodes.csv')
+fs.createReadStream('/app/data/SWIFTcodes.csv')
     .pipe(csv())
     .on('data', (row) => {
-
+        console.log('Parsed:', row);
         const bankData = {
-            countryISO2Code: row.countryISO2Code,
-            swiftCode: row.swiftCode,
-            codeType: row.codeType,
-            name: row.name,
-            address: row.address,
-            townName: row.townName,
-            countryName: row.countryName,
-            timeZone: row.timeZone,
+            countryISO2Code: row['COUNTRY ISO2 CODE'], //mapuję nazwy pól z CSV
+            swiftCode: row['SWIFT CODE'],
+            codeType: row['CODE TYPE'],
+            name: row['NAME'],
+            address: row['ADDRESS'],
+            townName: row['TOWN NAME'],
+            countryName: row['COUNTRY NAME'],
+            timeZone: row['TIME ZONE'],
         };
         convertedData.push(bankData);
     })
     .on('end', async () => {
+        console.log(convertedData);
         try {
             await BankModel.insertMany(convertedData);
             console.log('Data imported to MongoDB');
