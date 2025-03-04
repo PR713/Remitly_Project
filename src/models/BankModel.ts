@@ -1,16 +1,21 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 
-const Schema = mongoose.Schema;
+export interface IBank extends Document {
+    address: string;
+    bankName: string;
+    countryISO2: string;
+    countryName: string;
+    isHeadquarter: boolean;
+    swiftCode: string;
+}
 
-const bankSchema =  new Schema({
-    countryISO2Code: String,
-    swiftCode: String,
-    codeType: String,
-    name: String,
-    address: String,
-    townName: String,
-    countryName: String,
-    timeZone: String,
+const bankSchema = new mongoose.Schema({
+    address: { type: String, required: true },
+    bankName: { type: String, required: true },
+    countryISO2: { type: String, required: true, uppercase: true },
+    countryName: { type: String, required: true, uppercase: true },
+    isHeadquarter: { type: Boolean, required: true },
+    swiftCode: { type: String, required: true, unique: true },
 });
 
-export const BankModel = mongoose.model('Bank', bankSchema);
+export const BankModel = mongoose.model<IBank>("Bank", bankSchema);

@@ -15,15 +15,16 @@ fs.createReadStream('/app/data/SWIFTcodes.csv')
     .pipe(csv())
     .on('data', (row) => {
         console.log('Parsed:', row);
+
+        const isHeadquarter = row['SWIFT CODE'].endsWith('XXX');
+
         const bankData = {
-            countryISO2Code: row['COUNTRY ISO2 CODE'], //mapuję nazwy pól z CSV
-            swiftCode: row['SWIFT CODE'],
-            codeType: row['CODE TYPE'],
-            name: row['NAME'],
             address: row['ADDRESS'],
-            townName: row['TOWN NAME'],
-            countryName: row['COUNTRY NAME'],
-            timeZone: row['TIME ZONE'],
+            bankName: row['NAME'],
+            countryISO2: row['COUNTRY ISO2 CODE'].toUpperCase(),
+            countryName: row['COUNTRY NAME'].toUpperCase(),
+            isHeadquarter: isHeadquarter,
+            swiftCode: row['SWIFT CODE'],
         };
         convertedData.push(bankData);
     })
