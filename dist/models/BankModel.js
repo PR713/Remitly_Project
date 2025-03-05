@@ -12,6 +12,5 @@ const bankSchema = new mongoose_1.default.Schema({
     countryName: { type: String, required: true, uppercase: true },
     isHeadquarter: { type: Boolean, required: true },
     swiftCode: { type: String, required: true, unique: true },
-    branches: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: 'Bank' }]
 });
-exports.BankModel = mongoose_1.default.model('Bank', bankSchema);
+exports.BankModel = mongoose_1.default.model("Bank", bankSchema);

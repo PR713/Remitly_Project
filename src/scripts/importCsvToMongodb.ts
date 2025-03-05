@@ -1,3 +1,4 @@
+//docker exec -it remitly_project-app-1 node /app/dist/scripts/importCsvToMongodb.js
 import * as fs from 'fs';
 import csv = require('csv-parser');
 import mongoose from "mongoose";

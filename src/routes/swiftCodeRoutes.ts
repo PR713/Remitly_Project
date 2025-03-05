@@ -3,16 +3,16 @@ import {getSwiftCode} from '../controllers/swiftCodesController'
 
 const router = express.Router();
 
-router.get('/v1/swift-codes/:swiftCode', (req: Request, res: Response) => {
+router.get('/swift-codes/:swiftCode', (req: Request, res: Response) => {
     getSwiftCode(req, res);
 });
 
 
-router.get('/v1/swift-codes/country/:countryISO2code');
+//router.get('/v1/swift-codes/country/:countryISO2code');
 
-router.post('/v1/swift-codes');
+//router.post('/v1/swift-codes');
 
-router.delete('/v1/swift-codes/:swiftCode')
+//router.delete('/v1/swift-codes/:swiftCode')
 
 
 export default router

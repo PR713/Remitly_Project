@@ -60,7 +60,7 @@ fs.createReadStream('/app/data/SWIFTcodes.csv')
     console.log('Parsed:', row);
     const isHeadquarter = row['SWIFT CODE'].endsWith('XXX');
     const bankData = {
-        address: row['ADDRESS'], //mapuję nazwy pól z CSV
+        address: row['ADDRESS'],
         bankName: row['NAME'],
         countryISO2: row['COUNTRY ISO2 CODE'].toUpperCase(),
         countryName: row['COUNTRY NAME'].toUpperCase(),

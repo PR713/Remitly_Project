@@ -11,9 +11,10 @@ services:
     volumes:
       - ./data:/app/data
       - ./src:/app/src
+      - ./dist:/app/dist
     environment:
       DB_HOST: db
-    command: node dist/index.js
+    command: npm start
   db:
     image: mongo:6.0
     env_file:

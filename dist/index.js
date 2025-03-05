@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const swiftCodeRoutes_1 = __importDefault(require("./routes/swiftCodeRoutes"));
 const app = (0, express_1.default)();
 const port = 8080;
 // Połączenie z MongoDB
@@ -15,6 +16,7 @@ mongoose_1.default.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PA
 app.get('/', (req, res) => {
     res.send('Hello, Remitly!');
 });
+app.use('/v1', swiftCodeRoutes_1.default);
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 });

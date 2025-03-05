@@ -13,4 +13,4 @@ RUN npx tsc
 
 EXPOSE 8080
 
-CMD ["npm", "dist/index.js"]
+CMD ["node", "dist/index.js"]

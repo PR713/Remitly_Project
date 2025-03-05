@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import mongoose from 'mongoose';
+import swiftCodeRoutes from "./routes/swiftCodeRoutes";
 
 const app = express();
 const port = 8080;
@@ -14,6 +15,8 @@ mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
 app.get('/', (req, res) => {
     res.send('Hello, Remitly!');
 });
+
+app.use('/v1', swiftCodeRoutes);
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
