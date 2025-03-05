@@ -42,6 +42,7 @@ export const getSwiftCode = async (req: Request, res: Response) => {
 
 
 
+
 export const getSwiftCodesByCountry = async (req: Request, res: Response) => {
     const countryISO2 = req.params.countryISO2code;
 
@@ -67,3 +68,33 @@ export const getSwiftCodesByCountry = async (req: Request, res: Response) => {
         return res.status(500).json({message: "Internal server error"});
     }
 }
+
+
+
+
+export const addNewSwiftCodeEntries = async (req: Request, res: Response) => {
+    const { address, bankName, countryISO2, countryName, isHeadquarter, swiftCode } = req.body;
+
+    try {
+        const existingBank = await BankModel.findOne({swiftCode}).exec();
+        if (existingBank) {
+            return res.status(400).json({message: "SWIFT code already exists!"});
+        }
+
+        const newBank = new BankModel({
+            address,
+            bankName,
+            countryISO2: countryISO2.toUpperCase(),
+            countryName: countryName.toUpperCase(),
+            isHeadquarter,
+            swiftCode,
+        });
+
+        await newBank.save();
+
+        return res.status(201).json({message: "SWIFT code added successfully" });
+    } catch (error) {
+        console.error("Error", error);
+        return res.status(500).json({message: "Internal server error" });
+    }
+};

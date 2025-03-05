@@ -1,5 +1,5 @@
 import express, {Request, Response} from 'express';
-import {getSwiftCode, getSwiftCodesByCountry} from '../controllers/swiftCodesController'
+import {addNewSwiftCodeEntries, getSwiftCode, getSwiftCodesByCountry} from '../controllers/swiftCodesController'
 
 const router = express.Router();
 
@@ -14,7 +14,12 @@ router.get('/swift-codes/country/:countryISO2code',
     getSwiftCodesByCountry(req, res);
     });
 
-//router.post('/swift-codes');
+
+router.post('/swift-codes',
+    (req: Request, res: Response) => {
+    addNewSwiftCodeEntries(req, res);
+    });
+
 
 //router.delete('/swift-codes/:swiftCode')
 

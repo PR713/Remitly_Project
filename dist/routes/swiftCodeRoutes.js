@@ -12,6 +12,8 @@ router.get('/swift-codes/:swiftCode', (req, res) => {
 router.get('/swift-codes/country/:countryISO2code', (req, res) => {
     (0, swiftCodesController_1.getSwiftCodesByCountry)(req, res);
 });
-//router.post('/swift-codes');
+router.post('/swift-codes', (req, res) => {
+    (0, swiftCodesController_1.addNewSwiftCodeEntries)(req, res);
+});
 //router.delete('/swift-codes/:swiftCode')
 exports.default = router;

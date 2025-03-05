@@ -11,6 +11,7 @@ mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Failed to connect to MongoDB', err));
 
+app.use(express.json());
 
 app.get('/', (req, res) => {
     res.send('Hello, Remitly!');

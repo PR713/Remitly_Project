@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSwiftCodesByCountry = exports.getSwiftCode = void 0;
+exports.addNewSwiftCodeEntries = exports.getSwiftCodesByCountry = exports.getSwiftCode = void 0;
 const BankModel_1 = require("../models/BankModel");
 const getSwiftCode = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const swiftCode = req.params.swiftCode;
@@ -67,3 +67,27 @@ const getSwiftCodesByCountry = (req, res) => __awaiter(void 0, void 0, void 0, f
     }
 });
 exports.getSwiftCodesByCountry = getSwiftCodesByCountry;
+const addNewSwiftCodeEntries = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { address, bankName, countryISO2, countryName, isHeadquarter, swiftCode } = req.body;
+    try {
+        const existingBank = yield BankModel_1.BankModel.findOne({ swiftCode }).exec();
+        if (existingBank) {
+            return res.status(400).json({ message: "SWIFT code already exists!" });
+        }
+        const newBank = new BankModel_1.BankModel({
+            address,
+            bankName,
+            countryISO2: countryISO2.toUpperCase(),
+            countryName: countryName.toUpperCase(),
+            isHeadquarter,
+            swiftCode,
+        });
+        yield newBank.save();
+        return res.status(201).json({ message: "SWIFT code added successfully" });
+    }
+    catch (error) {
+        console.error("Error", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.addNewSwiftCodeEntries = addNewSwiftCodeEntries;
