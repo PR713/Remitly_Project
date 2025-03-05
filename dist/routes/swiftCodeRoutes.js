@@ -9,7 +9,9 @@ const router = express_1.default.Router();
 router.get('/swift-codes/:swiftCode', (req, res) => {
     (0, swiftCodesController_1.getSwiftCode)(req, res);
 });
-//router.get('/v1/swift-codes/country/:countryISO2code');
-//router.post('/v1/swift-codes');
-//router.delete('/v1/swift-codes/:swiftCode')
+router.get('/swift-codes/country/:countryISO2code', (req, res) => {
+    (0, swiftCodesController_1.getSwiftCodesByCountry)(req, res);
+});
+//router.post('/swift-codes');
+//router.delete('/swift-codes/:swiftCode')
 exports.default = router;

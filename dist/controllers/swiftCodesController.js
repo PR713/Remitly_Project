@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSwiftCode = void 0;
+exports.getSwiftCodesByCountry = exports.getSwiftCode = void 0;
 const BankModel_1 = require("../models/BankModel");
 const getSwiftCode = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const swiftCode = req.params.swiftCode;
@@ -17,15 +17,6 @@ const getSwiftCode = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         const bank = yield BankModel_1.BankModel.findOne({ swiftCode }).exec();
         if (!bank) {
             return res.status(404).json({ message: "SWIFT code not found" });
-        }
-        let branches = [];
-        if (bank.isHeadquarter) {
-            branches = yield BankModel_1.BankModel.find({
-                $and: [
-                    { swiftCode: { $ne: bank.swiftCode } },
-                    { swiftCode: new RegExp(`^${bank.swiftCode.slice(0, 8)}`) }
-                ]
-            }).select("-_id address bankName countryISO2 isHeadquarter swiftCode");
         }
         const responseData = {
             address: bank.address,
@@ -35,13 +26,44 @@ const getSwiftCode = (req, res) => __awaiter(void 0, void 0, void 0, function* (
             isHeadquarter: bank.isHeadquarter,
             swiftCode: bank.swiftCode,
         };
+        let branches = [];
         if (bank.isHeadquarter) {
+            branches = yield BankModel_1.BankModel.find({
+                $and: [
+                    { swiftCode: { $ne: bank.swiftCode } },
+                    { swiftCode: new RegExp(`^${bank.swiftCode.slice(0, 8)}`) }
+                ]
+            }).select("-_id address bankName countryISO2 isHeadquarter swiftCode");
             responseData.branches = branches;
         }
         return res.json(responseData);
     }
     catch (error) {
-        res.status(500).json({ message: "Internal server error" });
+        return res.status(500).json({ message: "Internal server error" });
     }
 });
 exports.getSwiftCode = getSwiftCode;
+const getSwiftCodesByCountry = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const countryISO2 = req.params.countryISO2code;
+    try {
+        const banks = yield BankModel_1.BankModel.find({ countryISO2 }).exec();
+        if (!banks) {
+            return res.status(404).json({ message: "Country does not exist in database" });
+        }
+        return res.json({
+            countryISO2,
+            countryName: banks[0].countryName,
+            swiftCodes: banks.map(bank => ({
+                address: bank.address,
+                bankName: bank.bankName,
+                countryISO2: bank.countryISO2,
+                isHeadquarter: bank.isHeadquarter,
+                swiftCode: bank.swiftCode,
+            }))
+        });
+    }
+    catch (error) {
+        return res.status(500).json({ message: "Internal server error" });
+    }
+});
+exports.getSwiftCodesByCountry = getSwiftCodesByCountry;

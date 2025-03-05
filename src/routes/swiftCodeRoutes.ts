@@ -1,18 +1,22 @@
 import express, {Request, Response} from 'express';
-import {getSwiftCode} from '../controllers/swiftCodesController'
+import {getSwiftCode, getSwiftCodesByCountry} from '../controllers/swiftCodesController'
 
 const router = express.Router();
 
-router.get('/swift-codes/:swiftCode', (req: Request, res: Response) => {
+router.get('/swift-codes/:swiftCode',
+    (req: Request, res: Response) => {
     getSwiftCode(req, res);
 });
 
 
-//router.get('/v1/swift-codes/country/:countryISO2code');
+router.get('/swift-codes/country/:countryISO2code',
+    (req: Request, res: Response) => {
+    getSwiftCodesByCountry(req, res);
+    });
 
-//router.post('/v1/swift-codes');
+//router.post('/swift-codes');
 
-//router.delete('/v1/swift-codes/:swiftCode')
+//router.delete('/swift-codes/:swiftCode')
 
 
 export default router

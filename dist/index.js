@@ -9,7 +9,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const swiftCodeRoutes_1 = __importDefault(require("./routes/swiftCodeRoutes"));
 const app = (0, express_1.default)();
 const port = 8080;
-// Połączenie z MongoDB
+// Connection to MongoDB, default connect()
 mongoose_1.default.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:27017/${process.env.DB_NAME}?authSource=admin`)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('Failed to connect to MongoDB', err));

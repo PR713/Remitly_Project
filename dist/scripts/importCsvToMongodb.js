@@ -45,6 +45,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+//docker exec -it remitly_project-app-1 node /app/dist/scripts/importCsvToMongodb.js
 const fs = __importStar(require("fs"));
 const csv = require("csv-parser");
 const mongoose_1 = __importDefault(require("mongoose"));
