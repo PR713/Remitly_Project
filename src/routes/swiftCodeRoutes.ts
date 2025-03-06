@@ -1,7 +1,13 @@
 import express, {Request, Response} from 'express';
-import {addNewSwiftCodeEntries, getSwiftCode, getSwiftCodesByCountry} from '../controllers/swiftCodesController'
+import {
+    addNewSwiftCodeEntries,
+    deleteSwiftCode,
+    getSwiftCode,
+    getSwiftCodesByCountry
+} from '../controllers/swiftCodesController'
 
 const router = express.Router();
+
 
 router.get('/swift-codes/:swiftCode',
     (req: Request, res: Response) => {
@@ -21,7 +27,9 @@ router.post('/swift-codes',
     });
 
 
-//router.delete('/swift-codes/:swiftCode')
-
+router.delete('/swift-codes/:swiftCode',
+    (req: Request, res: Response) => {
+    deleteSwiftCode(req, res);
+    })
 
 export default router
