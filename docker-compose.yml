@@ -3,7 +3,7 @@ services:
   app:
     build: .
     ports:
-      - "8080:8080"
+      - "${APP_PORT}:${APP_PORT}"
     depends_on:
       - db
     env_file:
@@ -23,7 +23,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
       MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "27017:27017"
+      - "${DB_PORT}:${DB_PORT}"
     volumes:
       - mongo-data:/data/db
 

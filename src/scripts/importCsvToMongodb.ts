@@ -2,10 +2,18 @@
 import * as fs from 'fs';
 import csv = require('csv-parser');
 import mongoose from "mongoose";
-import { BankModel } from '../models/BankModel';
+import {BankInput, BankModel} from '../models/BankModel';
 import 'dotenv/config';
 
-const convertedData: any[] = [];
+interface CsvRow {
+    'SWIFT CODE': string;
+    'ADDRESS': string;
+    'NAME': string;
+    'COUNTRY ISO2 CODE': string;
+    'COUNTRY NAME': string;
+}
+
+const convertedData: BankInput[] = [];
 
 mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:27017/${process.env.DB_NAME}?authSource=admin`)
     .then(() => console.log('Connected to MongoDB'))
@@ -14,12 +22,12 @@ mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
 
 fs.createReadStream('/app/data/SWIFTcodes.csv')
     .pipe(csv())
-    .on('data', (row) => {
+    .on('data', (row: CsvRow) => {
         console.log('Parsed:', row);
 
         const isHeadquarter = row['SWIFT CODE'].endsWith('XXX');
 
-        const bankData = {
+        const bankData: BankInput = {
             address: row['ADDRESS'],
             bankName: row['NAME'],
             countryISO2: row['COUNTRY ISO2 CODE'].toUpperCase(),

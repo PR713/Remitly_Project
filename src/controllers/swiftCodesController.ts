@@ -1,14 +1,6 @@
 import { Request, Response } from "express";
-import { BankModel } from "../models/BankModel";
+import { BankModel, BankInput, BankResponse, Branch } from "../models/BankModel";
 
-interface Branch {
-    address: string;
-    bankName: string;
-    countryISO2: string;
-    countryName: string;
-    isHeadquarter: boolean;
-    swiftCode: string;
-}
 
 export const getSwiftCode = async (req: Request, res: Response) => {
     const swiftCode = req.params.swiftCode;
@@ -20,7 +12,7 @@ export const getSwiftCode = async (req: Request, res: Response) => {
             return res.status(404).json({ message: "SWIFT code not found" });
         }
 
-        const responseData: any = {
+        const responseData: BankResponse = {
             address: bank.address,
             bankName: bank.bankName,
             countryISO2: bank.countryISO2,
@@ -82,7 +74,7 @@ export const getSwiftCodesByCountry = async (req: Request, res: Response) => {
 
 
 
-export const addNewSwiftCodeEntries = async (req: Request, res: Response) => {
+export const addNewSwiftCodeEntries = async (req: Request<{}, {}, BankInput>, res: Response) => {
     const { address, bankName, countryISO2, countryName, isHeadquarter, swiftCode } = req.body;
 
     try {

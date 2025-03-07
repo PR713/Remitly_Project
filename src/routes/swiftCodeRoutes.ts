@@ -5,6 +5,7 @@ import {
     getSwiftCode,
     getSwiftCodesByCountry
 } from '../controllers/swiftCodesController'
+import {BankInput} from '../models/BankModel'
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get('/swift-codes/country/:countryISO2code',
 
 
 router.post('/swift-codes',
-    (req: Request, res: Response) => {
+    (req: Request<{}, {}, BankInput>, res: Response) => {
     addNewSwiftCodeEntries(req, res);
     });
 

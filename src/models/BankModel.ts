@@ -1,5 +1,36 @@
 import mongoose, { Document } from "mongoose";
 
+export interface BankInput {
+    address: string;
+    bankName: string;
+    countryISO2: string;
+    countryName: string;
+    isHeadquarter: boolean;
+    swiftCode: string;
+}
+
+
+export interface BankResponse {
+    address: string;
+    bankName: string;
+    countryISO2: string;
+    countryName: string;
+    isHeadquarter: boolean;
+    swiftCode: string;
+    branches?: Branch[];
+}
+
+
+export interface Branch {
+    address: string;
+    bankName: string;
+    countryISO2: string;
+    countryName: string;
+    isHeadquarter: boolean;
+    swiftCode: string;
+}
+
+
 export interface IBank extends Document {
     address: string;
     bankName: string;
@@ -8,6 +39,7 @@ export interface IBank extends Document {
     isHeadquarter: boolean;
     swiftCode: string;
 }
+
 
 const bankSchema = new mongoose.Schema({
     address: { type: String, required: true },
