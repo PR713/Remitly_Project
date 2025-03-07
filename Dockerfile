@@ -5,7 +5,7 @@ WORKDIR /app
 COPY package*.json ./
 
 
-RUN npm install
+RUN npm install --include=dev
 
 COPY . .
 
@@ -13,4 +13,4 @@ RUN npx tsc
 
 EXPOSE 8080
 
-CMD ["node", "dist/index.js"]
+CMD ["node", "dist/server.js"]

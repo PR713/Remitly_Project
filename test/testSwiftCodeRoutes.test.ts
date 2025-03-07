@@ -1,3 +1,4 @@
+//docker-compose exec app npm test
 import request from 'supertest';
 import {app} from "../src";
 import { BankModel } from "../src/models/BankModel";
