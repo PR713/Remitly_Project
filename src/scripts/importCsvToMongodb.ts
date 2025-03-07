@@ -22,10 +22,10 @@ mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
 
 fs.createReadStream('/app/data/SWIFTcodes.csv')
     .pipe(csv())
-    .on('data', (row: CsvRow) => {
+    .on('data', (row: CsvRow): void => {
         console.log('Parsed:', row);
 
-        const isHeadquarter = row['SWIFT CODE'].endsWith('XXX');
+        const isHeadquarter: boolean = row['SWIFT CODE'].endsWith('XXX');
 
         const bankData: BankInput = {
             address: row['ADDRESS'],
@@ -37,7 +37,7 @@ fs.createReadStream('/app/data/SWIFTcodes.csv')
         };
         convertedData.push(bankData);
     })
-    .on('end', async () => {
+    .on('end', async (): Promise<void> => {
         console.log(convertedData);
         try {
             await BankModel.insertMany(convertedData);

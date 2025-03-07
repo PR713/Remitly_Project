@@ -2,7 +2,7 @@ import 'dotenv/config';
 import express, {Application} from 'express';
 import mongoose from 'mongoose';
 import swiftCodeRoutes from "./routes/swiftCodeRoutes";
-
+import {Request, Response} from "express";
 
 const app: Application = express();
 const port: number = parseInt(process.env.APP_PORT ?? '8080', 10);
@@ -13,6 +13,10 @@ mongoose.connect(`mongodb://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${
     .catch((err: unknown) => console.error('Failed to connect to MongoDB', err));
 
 app.use(express.json());
+
+app.get('/', (req: Request, res: Response) => {
+    res.send('Hello, Remitly!');
+});
 
 app.use('/v1', swiftCodeRoutes);
 

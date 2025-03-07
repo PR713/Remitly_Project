@@ -1,4 +1,4 @@
-import express, {Request, Response} from 'express';
+import express, {Request, Response, Router} from 'express';
 import {
     addNewSwiftCodeEntries,
     deleteSwiftCode,
@@ -7,7 +7,7 @@ import {
 } from '../controllers/swiftCodesController'
 import {BankInput} from '../models/BankModel'
 
-const router = express.Router();
+const router: Router = express.Router();
 
 
 router.get('/swift-codes/:swiftCode',

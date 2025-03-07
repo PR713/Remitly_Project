@@ -100,18 +100,18 @@ const deleteSwiftCode = (req, res) => __awaiter(void 0, void 0, void 0, function
         if (!bank) { //if not exists bank is null
             return res.status(404).json({ message: "SWIFT code not found" });
         }
-        let branches = [];
         if (bank.isHeadquarter) {
+            let branches;
             branches = yield BankModel_1.BankModel.find({
                 $and: [
                     { swiftCode: { $ne: bank.swiftCode } },
                     { swiftCode: new RegExp(`^${bank.swiftCode.slice(0, 8)}`) }
                 ]
             }).select("-_id address bankName countryISO2 isHeadquarter swiftCode").exec();
-        }
-        if (bank.isHeadquarter && branches.length > 0) {
-            return res.status(400).json({ message: "Cannot delete headquarters! It has existing branches." +
-                    "Delete branches first." });
+            if (branches.length > 0) {
+                return res.status(400).json({ message: "Cannot delete headquarters! It has existing branches." +
+                        "Delete branches first." });
+            }
         }
         yield BankModel_1.BankModel.findOneAndDelete({ swiftCode });
         return res.status(200).json({ message: "SWIFT code deleted successfully" });
