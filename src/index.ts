@@ -5,7 +5,6 @@ import swiftCodeRoutes from "./routes/swiftCodeRoutes";
 import { Request, Response } from "express";
 
 export const app: Application = express();
-const port: number = parseInt(process.env.APP_PORT ?? '8080', 10);
 
 // Connection to MongoDB, default connect()
 if (process.env.NODE_ENV !== "test") {
@@ -22,5 +21,5 @@ app.get('/', (req: Request, res: Response) => {
 
 app.use('/v1', swiftCodeRoutes);
 
-// Eksportujemy app, ale nie uruchamiamy serwera
+// exporting app without launching the server
 export default app;
