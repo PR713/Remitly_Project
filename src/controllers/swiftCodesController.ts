@@ -5,6 +5,10 @@ import { BankModel, BankInput, BankResponse, Branch } from "../models/BankModel"
 export const getSwiftCode = async (req: Request, res: Response) => {
     const swiftCode = req.params.swiftCode;
 
+    if (!swiftCode || swiftCode.length !== 11) {
+        return res.status(400).json({ message: "SWIFT code must be exactly 11 characters long." });
+    }
+
     try {
         const bank = await BankModel.findOne({ swiftCode }).exec();
 
@@ -47,6 +51,10 @@ export const getSwiftCode = async (req: Request, res: Response) => {
 export const getSwiftCodesByCountry = async (req: Request, res: Response) => {
     const countryISO2 = req.params.countryISO2code;
 
+    if (!countryISO2 || countryISO2.length !== 2) {
+        return res.status(400).json({ message: "CountryISO2 code must be 2 letters long." });
+    }
+
     try {
         const banks = await BankModel.find({countryISO2}).exec();
 
@@ -76,6 +84,14 @@ export const getSwiftCodesByCountry = async (req: Request, res: Response) => {
 
 export const addNewSwiftCodeEntries = async (req: Request<{}, {}, BankInput>, res: Response) => {
     const { address, bankName, countryISO2, countryName, isHeadquarter, swiftCode } = req.body;
+
+    if (!swiftCode || swiftCode.length !== 11) {
+        return res.status(400).json({ message: "SWIFT code must be exactly 11 characters long." });
+    }
+
+    if (!countryISO2 || countryISO2.length !== 2) {
+        return res.status(400).json({message: "CountryISO2 code must be 2 letters long." });
+    }
 
     try {
         const existingBank = await BankModel.findOne({swiftCode}).exec();
@@ -108,6 +124,10 @@ export const deleteSwiftCode = async (req: Request, res: Response) => {
 
     const swiftCode = req.params.swiftCode;
 
+    if (!swiftCode || swiftCode.length !== 11) {
+        return res.status(400).json({ message: "SWIFT code must be exactly 11 characters long." });
+    }
+
     try {
         const bank = await BankModel.findOne({ swiftCode }).exec();
 
@@ -128,7 +148,7 @@ export const deleteSwiftCode = async (req: Request, res: Response) => {
 
 
             if (branches.length > 0) {
-                return res.status(400).json({message: "Cannot delete headquarters! It has existing branches." +
+                return res.status(403).json({message: "Cannot delete headquarters! It has existing branches." +
                         "Delete branches first."})
             }
         }

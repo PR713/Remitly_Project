@@ -13,6 +13,9 @@ exports.deleteSwiftCode = exports.addNewSwiftCodeEntries = exports.getSwiftCodes
 const BankModel_1 = require("../models/BankModel");
 const getSwiftCode = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const swiftCode = req.params.swiftCode;
+    if (!swiftCode || swiftCode.length !== 11) {
+        return res.status(400).json({ message: "SWIFT code must be exactly 11 characters long." });
+    }
     try {
         const bank = yield BankModel_1.BankModel.findOne({ swiftCode }).exec();
         if (!bank) { //if not exists bank is null
@@ -46,6 +49,9 @@ const getSwiftCode = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 exports.getSwiftCode = getSwiftCode;
 const getSwiftCodesByCountry = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const countryISO2 = req.params.countryISO2code;
+    if (!countryISO2 || countryISO2.length !== 2) {
+        return res.status(400).json({ message: "CountryISO2 code must be 2 letters long." });
+    }
     try {
         const banks = yield BankModel_1.BankModel.find({ countryISO2 }).exec();
         if (banks.length === 0) { //if not exists banks = []
@@ -71,6 +77,12 @@ const getSwiftCodesByCountry = (req, res) => __awaiter(void 0, void 0, void 0, f
 exports.getSwiftCodesByCountry = getSwiftCodesByCountry;
 const addNewSwiftCodeEntries = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { address, bankName, countryISO2, countryName, isHeadquarter, swiftCode } = req.body;
+    if (!swiftCode || swiftCode.length !== 11) {
+        return res.status(400).json({ message: "SWIFT code must be exactly 11 characters long." });
+    }
+    if (!countryISO2 || countryISO2.length !== 2) {
+        return res.status(400).json({ message: "CountryISO2 code must be 2 letters long." });
+    }
     try {
         const existingBank = yield BankModel_1.BankModel.findOne({ swiftCode }).exec();
         if (existingBank) {
@@ -95,6 +107,9 @@ const addNewSwiftCodeEntries = (req, res) => __awaiter(void 0, void 0, void 0, f
 exports.addNewSwiftCodeEntries = addNewSwiftCodeEntries;
 const deleteSwiftCode = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const swiftCode = req.params.swiftCode;
+    if (!swiftCode || swiftCode.length !== 11) {
+        return res.status(400).json({ message: "SWIFT code must be exactly 11 characters long." });
+    }
     try {
         const bank = yield BankModel_1.BankModel.findOne({ swiftCode }).exec();
         if (!bank) { //if not exists bank is null
@@ -109,7 +124,7 @@ const deleteSwiftCode = (req, res) => __awaiter(void 0, void 0, void 0, function
                 ]
             }).select("-_id address bankName countryISO2 isHeadquarter swiftCode").exec();
             if (branches.length > 0) {
-                return res.status(400).json({ message: "Cannot delete headquarters! It has existing branches." +
+                return res.status(403).json({ message: "Cannot delete headquarters! It has existing branches." +
                         "Delete branches first." });
             }
         }

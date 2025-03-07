@@ -28,9 +28,16 @@ describe("GET /v1/swift-codes/:swiftCode", () => {
     });
 
     it("should return 404 for non-existent SWIFT code", async () => {
-        const res = await request(app).get("/v1/swift-codes/NONEXIST");
+        const res = await request(app).get("/v1/swift-codes/NONEXISTABC");
         expect(res.status).toBe(404);
         expect(res.body.message).toBe("SWIFT code not found");
+    });
+
+    it("should return 400 if SWIFT code is not exactly 11 characters long", async () => {
+        const res = await request(app).get("/v1/swift-codes/TESTCDEBB");
+
+        expect(res.status).toBe(400);
+        expect(res.body.message).toBe("SWIFT code must be exactly 11 characters long.");
     });
 });
 
@@ -71,6 +78,13 @@ describe("GET /v1/swift-codes/country/:countryISO2code", () => {
         const res = await request(app).get("/v1/swift-codes/country/XX");
         expect(res.status).toBe(404);
         expect(res.body.message).toBe("Country does not exist in database");
+    });
+
+    it("should return 400 if countryISO2 code is note exactly 2 letters long", async () => {
+       const res = await request(app).get("/v1/swift-codes/country/ABC");
+
+       expect(res.status).toBe(400);
+        expect(res.body.message).toBe("CountryISO2 code must be 2 letters long.");
     });
 });
 
@@ -114,6 +128,36 @@ describe('POST /v1/swift-codes/:swiftCode', () => {
 
         expect(res.status).toBe(400);
         expect(res.body.message).toBe("SWIFT code already exists!");
+    });
+
+
+    it("should return 400 if SWIFT code is not exactly 11 characters long", async () => {
+        const res = await request(app).post("/v1/swift-codes").send({
+            address: "4561 New Bank St.",
+            bankName: "New Bank",
+            countryISO2: "PL",
+            countryName: "POLAND",
+            isHeadquarter: false,
+            swiftCode: "TESTCDEAB",
+        });
+
+        expect(res.status).toBe(400);
+        expect(res.body.message).toBe("SWIFT code must be exactly 11 characters long.");
+    });
+
+
+    it("should return 400 if countryISO2 code is note exactly 2 letters long", async () => {
+       const res = await request(app).post("/v1/swift-codes").send({
+           address: "132 Bank St.",
+           bankName: "The Bank IP",
+           countryISO2: "ALA",
+           countryName: "ALBANIA",
+           isHeadquarter: true,
+           swiftCode: "TESTDDFR10A",
+       });
+
+       expect(res.status).toBe(400);
+       expect(res.body.message).toBe("CountryISO2 code must be 2 letters long.");
     });
 });
 
@@ -175,8 +219,8 @@ describe('DELETE /v1/swift-codes/:swiftCode', () => {
 
         const res = await request(app).delete("/v1/swift-codes/TESTBBPLXXX");
 
-        expect(res.status).toBe(400);
+        expect(res.status).toBe(403);
         expect(res.body.message).toBe("Cannot delete headquarters! It has existing branches." +
             "Delete branches first.");
-    })
+    });
 })
